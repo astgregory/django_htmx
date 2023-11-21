@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load cache %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -36,119 +37,121 @@
             <!-- Таблица книг -->
             <form class="form-inline">
                 <table class="table table-bordered table-sm mt-5">
-                    {% trans "id" as id %}{% trans "title" as title %}
-                    {% trans "author" as author %}{% trans "price" as price %}
-                    {% trans "read" as read %}{% trans "ascend" as ascend %}
-                    {% trans "descend" as descend %}
-                    <thead>
-                    <tr>
-                        <!-- Заголовки столбцов таблицы -->
+                    <!-- Начало кэширования заголовка таблицы -->
+                    {% cache 600 table_header LANGUAGE_CODE %}
+                        {% trans "id" as id %}{% trans "title" as title %}
+                        {% trans "author" as author %}{% trans "price" as price %}
+                        {% trans "read" as read %}{% trans "ascend" as ascend %}
+                        {% trans "descend" as descend %}
+                        <thead>
+                        <tr>
+                            <!-- Заголовки столбцов таблицы -->
 
-                        <!-- Заголовок номера книги -->
-                        <th scope="col" style="width: 10%" class="text-center">
-                            <small>
-                                {% trans "No." %}
-                                <a href=""
-                                   hx-get="{% url 'book_list_sort' filter=id direction=ascend %}"
-                                   hx-target="#book-list"
-                                   hx-swap="innerHTML">
-                                    <i class="table-icon bi bi-arrow-down-square ms-1 {% trans 'id-ascend' %} disabled-button"></i>
-                                </a>
-                                <a href=""
-                                   hx-get="{% url 'book_list_sort' filter=id direction=descend %}"
-                                   hx-target="#book-list"
-                                   hx-swap="innerHTML">
-                                    <i class="table-icon bi bi-arrow-up-square {% trans 'id-descend' %}"></i>
-                                </a>
-                            </small>
-                        </th>
+                            <!-- Заголовок номера книги -->
+                            <th scope="col" style="width: 10%" class="text-center">
+                                <small>
+                                    {% trans "No." %}
+                                    <a href=""
+                                       hx-get="{% url 'book_list_sort' filter=id direction=ascend %}"
+                                       hx-target="#book-list"
+                                       hx-swap="innerHTML">
+                                        <i class="table-icon bi bi-arrow-down-square ms-1 {% trans 'id-ascend' %} disabled-button"></i>
+                                    </a>
+                                    <a href=""
+                                       hx-get="{% url 'book_list_sort' filter=id direction=descend %}"
+                                       hx-target="#book-list"
+                                       hx-swap="innerHTML">
+                                        <i class="table-icon bi bi-arrow-up-square {% trans 'id-descend' %}"></i>
+                                    </a>
+                                </small>
+                            </th>
 
-                        <!-- Заголовок названия книги -->
-                        <th scope="col" style="width: 26%" class="text-center">
-                            <small>
-                                {% trans "Title" %}
-                                <a href=""
-                                   hx-get="{% url 'book_list_sort' filter=title direction=ascend %}"
-                                   hx-target="#book-list"
-                                   hx-swap="innerHTML">
-                                    <i class="table-icon bi bi-arrow-down-square ms-1 {% trans 'title-ascend' %}"></i>
-                                </a>
-                                <a href=""
-                                   hx-get="{% url 'book_list_sort' filter=title direction=descend %}"
-                                   hx-target="#book-list"
-                                   hx-swap="innerHTML">
-                                    <i class="table-icon bi bi-arrow-up-square {% trans 'title-descend' %}"></i>
-                                </a>
-                            </small>
-                        </th>
+                            <!-- Заголовок названия книги -->
+                            <th scope="col" style="width: 26%" class="text-center">
+                                <small>
+                                    {% trans "Title" %}
+                                    <a href=""
+                                       hx-get="{% url 'book_list_sort' filter=title direction=ascend %}"
+                                       hx-target="#book-list"
+                                       hx-swap="innerHTML">
+                                        <i class="table-icon bi bi-arrow-down-square ms-1 {% trans 'title-ascend' %}"></i>
+                                    </a>
+                                    <a href=""
+                                       hx-get="{% url 'book_list_sort' filter=title direction=descend %}"
+                                       hx-target="#book-list"
+                                       hx-swap="innerHTML">
+                                        <i class="table-icon bi bi-arrow-up-square {% trans 'title-descend' %}"></i>
+                                    </a>
+                                </small>
+                            </th>
 
-                        <!-- Заголовок автора книги -->
-                        <th scope="col" style="width: 26%" class="text-center">
-                            <small>
-                                {% trans "Author" %}
-                                <a href=""
-                                   hx-get="{% url 'book_list_sort' filter=author direction=ascend %}"
-                                   hx-target="#book-list"
-                                   hx-swap="innerHTML">
-                                    <i class="table-icon bi bi-arrow-down-square ms-1 {% trans 'author-ascend' %}"></i>
-                                </a>
-                                <a href=""
-                                   hx-get="{% url 'book_list_sort' filter=author direction=descend %}"
-                                   hx-target="#book-list"
-                                   hx-swap="innerHTML">
-                                    <i class="table-icon bi bi-arrow-up-square {% trans 'author-descend' %}"></i>
-                                </a>
-                            </small>
-                        </th>
+                            <!-- Заголовок автора книги -->
+                            <th scope="col" style="width: 26%" class="text-center">
+                                <small>
+                                    {% trans "Author" %}
+                                    <a href=""
+                                       hx-get="{% url 'book_list_sort' filter=author direction=ascend %}"
+                                       hx-target="#book-list"
+                                       hx-swap="innerHTML">
+                                        <i class="table-icon bi bi-arrow-down-square ms-1 {% trans 'author-ascend' %}"></i>
+                                    </a>
+                                    <a href=""
+                                       hx-get="{% url 'book_list_sort' filter=author direction=descend %}"
+                                       hx-target="#book-list"
+                                       hx-swap="innerHTML">
+                                        <i class="table-icon bi bi-arrow-up-square {% trans 'author-descend' %}"></i>
+                                    </a>
+                                </small>
+                            </th>
 
-                        <!-- Заголовок цены книги -->
-                        <th scope="col" style="width: 11%" class="text-center">
-                            <small>
-                                {% trans "Price ($)" %}
-                                <a href=""
-                                   hx-get="{% url 'book_list_sort' filter=price direction=ascend %}"
-                                   hx-target="#book-list"
-                                   hx-swap="innerHTML">
-                                    <i class="table-icon bi bi-arrow-down-square ms-1 {% trans 'price-ascend' %}"></i>
-                                </a>
-                                <a href=""
-                                   hx-get="{% url 'book_list_sort' filter=price direction=descend %}"
-                                   hx-target="#book-list"
-                                   hx-swap="innerHTML">
-                                    <i class="table-icon bi bi-arrow-up-square {% trans 'price-descend' %}"></i>
-                                </a>
-                            </small>
-                        </th>
+                            <!-- Заголовок цены книги -->
+                            <th scope="col" style="width: 11%" class="text-center">
+                                <small>
+                                    {% trans "Price ($)" %}
+                                    <a href=""
+                                       hx-get="{% url 'book_list_sort' filter=price direction=ascend %}"
+                                       hx-target="#book-list"
+                                       hx-swap="innerHTML">
+                                        <i class="table-icon bi bi-arrow-down-square ms-1 {% trans 'price-ascend' %}"></i>
+                                    </a>
+                                    <a href=""
+                                       hx-get="{% url 'book_list_sort' filter=price direction=descend %}"
+                                       hx-target="#book-list"
+                                       hx-swap="innerHTML">
+                                        <i class="table-icon bi bi-arrow-up-square {% trans 'price-descend' %}"></i>
+                                    </a>
+                                </small>
+                            </th>
 
-                        <!-- Заголовок статуса книги -->
-                        <th scope="col" style="width: 11%" class="text-center">
-                            <small>
-                                {% trans "Status" %}
-                                <a href=""
-                                   hx-get="{% url 'book_list_sort' filter=read direction=descend %}"
-                                   hx-target="#book-list"
-                                   hx-swap="innerHTML">
-                                    <i class="table-icon bi bi-arrow-down-square ms-1 {% trans 'read-descend' %}"></i>
-                                </a>
-                                <a href=""
-                                   hx-get="{% url 'book_list_sort' filter=read direction=ascend %}"
-                                   hx-target="#book-list"
-                                   hx-swap="innerHTML">
-                                    <i class="table-icon bi bi-arrow-up-square {% trans 'read-ascend' %}"></i>
-                                </a>
-                            </small>
-                        </th>
+                            <!-- Заголовок статуса книги -->
+                            <th scope="col" style="width: 11%" class="text-center">
+                                <small>
+                                    {% trans "Status" %}
+                                    <a href=""
+                                       hx-get="{% url 'book_list_sort' filter=read direction=descend %}"
+                                       hx-target="#book-list"
+                                       hx-swap="innerHTML">
+                                        <i class="table-icon bi bi-arrow-down-square ms-1 {% trans 'read-descend' %}"></i>
+                                    </a>
+                                    <a href=""
+                                       hx-get="{% url 'book_list_sort' filter=read direction=ascend %}"
+                                       hx-target="#book-list"
+                                       hx-swap="innerHTML">
+                                        <i class="table-icon bi bi-arrow-up-square {% trans 'read-ascend' %}"></i>
+                                    </a>
+                                </small>
+                            </th>
 
-                        <!-- Заголовок кнопок действия -->
-                        <th scope="col" style="width: 16%" class="text-center">
-                            <small>
-                                {% trans "Actions" %}
-                            </small>
-                        </th>
+                            <!-- Заголовок кнопок действия -->
+                            <th scope="col" style="width: 16%" class="text-center">
+                                <small>
+                                    {% trans "Actions" %}
+                                </small>
+                            </th>
 
-                    </tr>
-                    </thead>
-
+                        </tr>
+                        </thead>
+                    {% endcache %}
                     <!-- Список книг -->
                     <tbody id="book-list">
                     {% include "partial_book_list.html" %}

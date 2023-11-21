@@ -22,4 +22,5 @@ urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
     path('rosetta/', include('rosetta.urls')),
     path('', include('books.urls')),
+    path('__debug__/', include('debug_toolbar.urls')),
 )
