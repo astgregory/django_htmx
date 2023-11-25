@@ -19,7 +19,7 @@ def delete_cache_keys():
 def book_list(request):
     book_list = cache.get_or_set('cached_book_list', Book.objects.all())
     form = BookCreateForm(auto_id=False)
-    return render(request, 'base.html', {'book_list': book_list, 'form': form})
+    return render(request, '../templates/base.html', {'book_list': book_list, 'form': form})
 
 
 @require_http_methods(['POST'])
@@ -28,7 +28,7 @@ def create_book(request):
     if form.is_valid:
         book = form.save()
         delete_cache_keys()
-    return render(request, 'partial_book_detail.html', {'book': book})
+    return render(request, '../templates/partial_book_detail.html', {'book': book})
 
 
 def update_book_details(request, pk):
@@ -38,16 +38,16 @@ def update_book_details(request, pk):
         if form.is_valid():
             book = form.save()
             delete_cache_keys()
-            return render(request, 'partial_book_detail.html', {'book': book})
+            return render(request, '../templates/partial_book_detail.html', {'book': book})
     else:
         form = BookEditForm(instance=book)
-    return render(request, 'partial_book_update_form.html', {'book': book, 'form': form})
+    return render(request, '../templates/partial_book_update_form.html', {'book': book, 'form': form})
 
 
 @require_http_methods(['GET'])
 def book_detail(request, pk):
     book = get_object_or_404(Book, pk=pk)
-    return render(request, 'partial_book_detail.html', {'book': book})
+    return render(request, '../templates/partial_book_detail.html', {'book': book})
 
 
 @require_http_methods(['DELETE'])
@@ -67,7 +67,7 @@ def update_book_status(request, pk):
         book.read = True
     book.save()
     delete_cache_keys()
-    return render(request, 'partial_book_detail.html', {'book': book})
+    return render(request, '../templates/partial_book_detail.html', {'book': book})
 
 
 @require_http_methods(['GET'])
@@ -85,4 +85,4 @@ def book_list_sort(request, filter, direction):
     else:
         book_list = cache.get_or_set('cached_book_list', Book.objects.all())
 
-    return render(request, 'partial_book_list.html', {'book_list': book_list})
+    return render(request, '../templates/partial_book_list.html', {'book_list': book_list})
